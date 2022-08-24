@@ -256,4 +256,28 @@ impl Api {
 
         Ok(())
     }
+
+    pub async fn edit_category(&self, name: &str, path: &str) -> Result<(), error::Error> {
+        let addr = push_own!(
+            self.address,
+            "/api/v2/torrents/editCategory?savePath=",
+            path,
+            "&category=",
+            name
+        );
+
+        dbg! {&addr};
+
+        let res = self
+            .client
+            .get(&addr)
+            .headers(self.make_headers()?)
+            .send()
+            .await?
+            .bytes()
+            .await?;
+        dbg! {res};
+
+        Ok(())
+    }
 }
